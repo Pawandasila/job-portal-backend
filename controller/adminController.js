@@ -117,20 +117,28 @@ export const Adminlogin = async (req, res, next) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite : "strict"
     });
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite : "strict"
     });
 
     const adminResponse = {
-      id: existingAdmin._id,
+      user:{
+        _id: existingAdmin._id,
+        username : existingAdmin.username,
+        email : existingAdmin.email,
+      },
       accessToken,
+      refreshToken
     };
     res.status(200).json({
       message: "Admin logged in successfully",
       adminResponse,
+      
     });
     next();
   } catch (error) {

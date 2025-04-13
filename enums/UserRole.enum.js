@@ -1,7 +1,7 @@
 export const UserRole = {
   JOBSEEKER: "jobseeker",
   RECRUITER: "recruiter",
-  ADMIN: "admin",
+  ADMIN: "Admin",
 };
 
 export const UserRoleValues = Object.values(UserRole);

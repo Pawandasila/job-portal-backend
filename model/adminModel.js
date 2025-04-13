@@ -21,6 +21,7 @@ const adminSchema = new Schema(
       type: String,
       required: true,
       enum: ["Admin"],
+      default:"Admin"
     },
     refreshToken: {
       type: String,
@@ -38,17 +39,17 @@ adminSchema.methods.isValidPassword = async function (password) {
 };
 
 adminSchema.methods.generateAccessToken = function () {
-  const { _id } = this;
-  const accessToken = jwt.sign({ userId: _id }, process.env.JWT_ACCESS_SECRET, {
+  const { _id  , role} = this;
+  const accessToken = jwt.sign({ userId: _id  , role}, process.env.JWT_ACCESS_SECRET, {
     expiresIn: "1h",
   });
   return accessToken;
 };
 
 adminSchema.methods.generateRefreshToken = function () {
-  const { _id } = this;
+  const { _id , role } = this;
   const refreshToken = jwt.sign(
-    { userId: _id },
+    { userId: _id  , role},
     process.env.JWT_REFRESH_SECRET,
     {
       expiresIn: "7d",
