@@ -3,6 +3,7 @@ import { z } from "zod";
 import { HTTPSTATUS } from "../config/https.config.js";
 import { signUpSchema, loginSchema } from "../validation/auth.validation.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 // Utility function to generate tokens for a user
 const generateTokens = async (userId) => {
@@ -240,3 +241,34 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getDetailById = async(req , res , next) => {
+  try {
+    const {id} = req.params;
+    if(!id || !mongoose.Types.ObjectId.isValid(id)){
+      res.status(HTTPSTATUS.BAD_REQUEST).json({
+        success : false,
+        message : "Invalid or missing Id"
+      });
+    }
+
+    const user = await User.findById(id).select("-password -refreshToken -__v");
+    if(!user){
+      return res.status(HTTPSTATUS.NOT_FOUND).json({
+        success: false,
+        status: HTTPSTATUS.NOT_FOUND,
+        message: "User not found",
+      });
+    }
+
+    return res.status(HTTPSTATUS.OK).json({
+      success: true,
+      message: "User details fetched successfully.",
+      data: user,
+    });
+    
+  } catch (error) {
+    console.error("Error in getDetailById:", error);
+    next(error);
+  }
+}

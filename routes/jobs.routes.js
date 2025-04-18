@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/job/create", verifyAccessToken, isAnyRecruiterOrAdmin, createJob);
 router.get("/job/:id", verifyAccessToken, isAnyRecruiterOrAdminOrJobseeker, getJobById);
-router.get("/jobs", verifyAccessToken , isAnyRecruiterOrAdmin,getAllJobs);
+router.get("/jobs", verifyAccessToken , getAllJobs);
 router.get("/jobs/not-applied", verifyAccessToken, getNotAppliedJobs);
 
 
@@ -28,6 +28,7 @@ router.get("/admin/jobs/create", verifyAdminAccessToken , isAdmin ,createJob);
 router.get("/admin/jobs/:id", verifyAdminAccessToken , isAdmin ,updateJob);
 router.get("/admin/jobs/company/:id", verifyAdminAccessToken , isAdmin ,getJobByCompanyId);
 router.get("/admin/jobs/user/:id", verifyAdminAccessToken , isAdmin ,getJobByUserId);
+router.get("/admin/jobs/job/:id", verifyAdminAccessToken , isAdmin ,getJobById);
 
 
 router.get("/admin/job/applied/user", verifyAdminAccessToken, isAnyRecruiterOrAdminOrJobseeker, getAppliedJobsByUserId);
