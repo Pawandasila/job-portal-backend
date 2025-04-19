@@ -19,17 +19,29 @@ const jobseekerSchema = new mongoose.Schema({
   // Resume and Profile Picture
   resume: {
     type: String,
-    match: [
-      /^(https?:\/\/.*\.(?:pdf|docx|txt))$/,
-      "Please provide a valid resume URL",
-    ],
+    validate: {
+      validator: function(value) {
+        return (
+          !value || 
+          /^https?:\/\/.*\.(pdf|docx|txt)$/i.test(value) ||
+          /^\/uploads\/.*\.(pdf|docx|txt)$/i.test(value)
+        );
+      },
+      message: "Please provide a valid resume file path",
+    },
   },
   photo: {
     type: String,
-    match: [
-      /^(https?:\/\/.*\.(?:jpg|jpeg|png|gif))$/,
-      "Please provide a valid photo URL",
-    ],
+    validate: {
+      validator: function(value) {
+        return (
+          !value ||
+          /^https?:\/\/.*\.(jpg|jpeg|png|gif)$/i.test(value) ||
+          /^\/uploads\/.*\.(jpg|jpeg|png|gif)$/i.test(value)
+        );
+      },
+      message: "Please provide a valid photo file path",
+    },
   },
 
   // Qualifications and Experience

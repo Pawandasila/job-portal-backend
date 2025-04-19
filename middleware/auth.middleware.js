@@ -54,10 +54,12 @@ export const verifyAdminAccessToken = asyncHandler(async (req, res, next) => {
       accessToken,
       process.env.JWT_ACCESS_SECRET,
       async (err, decoded) => {
+
+        
         if (err) {
           return res
-            .status(HTTPSTATUS.UNAUTHORIZED)
-            .json({ message: "Unauthorized" });
+          .status(HTTPSTATUS.UNAUTHORIZED)
+          .json({ message: "Unauthorized" , err });
         }
 
         const admin = await AdminModel.findById(decoded?.userId);

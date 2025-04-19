@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { checkCompletionStatus, createJobSeeker, getJobSeekerById, getJobSeekerByUserId } from "../controller/job-seeker.controller.js";
+import { checkCompletionStatus, createJobSeeker, getJobSeekerById, getJobSeekerByUserId, handleFileUploads, updateJobSeeker } from "../controller/job-seeker.controller.js";
 import { verifyAccessToken } from "../middleware/auth.middleware.js";
-import { isJobseeker } from "../middleware/role.middleware.js";
+import { isAnyRecruiterOrAdminOrJobseeker, isJobseeker } from "../middleware/role.middleware.js";
 
 const router = Router();    
 
-router.post('/job-seeker/create' , verifyAccessToken , isJobseeker , createJobSeeker);
 router.get('/job-seeker/me' , verifyAccessToken , isJobseeker , getJobSeekerByUserId);
 router.get('/job-seeker/check-status/:id' , verifyAccessToken , isJobseeker , checkCompletionStatus);
+router.post('/job-seeker/create' , verifyAccessToken , isJobseeker , handleFileUploads , createJobSeeker);
+router.patch('/job-seeker/update/:id' , verifyAccessToken , isAnyRecruiterOrAdminOrJobseeker , handleFileUploads , updateJobSeeker)
 
 export default router;

@@ -12,6 +12,7 @@ import adminRouter from "./routes/admin.routes.js";
 import jobseeker from "./routes/job-seeker.routes.js";
 import application from "./routes/application.routes.js";
 import contact from "./routes/contact.routes.js";
+import path from "path";
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.get('/', (async (req, res) => {
 
 
 app.use(ErrorHandler);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 
 app.use('/api', indexRouter);
