@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCompany, getCompanyById, getAllCompanies, updateCompany, deleteCompany } from "../controller/companies.controller.js";
+import { createCompany, getCompanyById, getAllCompanies, updateCompany, deleteCompany, getCompanyByRecruiterId } from "../controller/companies.controller.js";
 import { verifyAccessToken, verifyAdminAccessToken } from "../middleware/auth.middleware.js";
 import { isAnyRecruiterOrAdmin } from "../middleware/role.middleware.js";
 
@@ -11,6 +11,7 @@ router.get("/companies", verifyAccessToken, isAnyRecruiterOrAdmin, getAllCompani
 
 router.put("/company/:id", verifyAccessToken, isAnyRecruiterOrAdmin, updateCompany);
 router.post("/company/:id/delete", verifyAccessToken, isAnyRecruiterOrAdmin, deleteCompany);
+router.get("/company/recruiter/:id", verifyAccessToken, isAnyRecruiterOrAdmin, getCompanyByRecruiterId);
 
 
 //admin routes

@@ -5,7 +5,8 @@ import { isAnyRecruiterOrAdminOrJobseeker, isJobseeker } from "../middleware/rol
 
 const router = Router();    
 
-router.get('/job-seeker/me' , verifyAccessToken , isJobseeker , getJobSeekerByUserId);
+router.get('/job-seeker/me' , verifyAccessToken , isAnyRecruiterOrAdminOrJobseeker , getJobSeekerByUserId);
+router.get('/job-seeker/:id' , verifyAccessToken , isAnyRecruiterOrAdminOrJobseeker , getJobSeekerById);
 router.get('/job-seeker/check-status/:id' , verifyAccessToken , isJobseeker , checkCompletionStatus);
 router.post('/job-seeker/create' , verifyAccessToken , isJobseeker , handleFileUploads , createJobSeeker);
 router.patch('/job-seeker/update/:id' , verifyAccessToken , isAnyRecruiterOrAdminOrJobseeker , handleFileUploads , updateJobSeeker)

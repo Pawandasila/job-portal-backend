@@ -124,3 +124,26 @@ export const deleteCompany = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getCompanyByRecruiterId = async (req, res, next) => {
+  try {
+    const company = await Companies.find({ createdBy: req.params.id });
+
+    if (company.length === 0) {
+      return res.status(HTTPSTATUS.NOT_FOUND).json({
+        success: false,
+        status: HTTPSTATUS.NOT_FOUND,
+        message: "No company found for this recruiter",
+      });
+    }
+
+    res.status(HTTPSTATUS.OK).json({
+      success: true,
+      status: HTTPSTATUS.OK,
+      message: "Company(ies) found",
+      company,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -6,21 +6,21 @@ import { isAdmin, isAnyRecruiterOrAdmin, isAnyRecruiterOrAdminOrJobseeker, isJob
 const router = Router();
 
 router.post("/job/create", verifyAccessToken, isAnyRecruiterOrAdmin, createJob);
-router.get("/job/:id", verifyAccessToken, isAnyRecruiterOrAdminOrJobseeker, getJobById);
+router.get("/job/:id", verifyAccessToken,  getJobById);
 router.get("/jobs", verifyAccessToken , getAllJobs);
 router.get("/jobs/not-applied", verifyAccessToken, getNotAppliedJobs);
 
 
 router.put("/job/:id", verifyAccessToken, isAnyRecruiterOrAdminOrJobseeker , updateJob);
 router.post("/job/delete/:id", verifyAccessToken, isAnyRecruiterOrAdmin, deleteJob);
-router.get("/jobs/company/:id", getJobByCompanyId);
-router.get("/jobs/user/:id", getJobByUserId);
+router.get("/jobs/company/:id" , isAnyRecruiterOrAdminOrJobseeker, getJobByCompanyId);
+router.get("/jobs/user/:id",  verifyAccessToken, isAnyRecruiterOrAdminOrJobseeker , getJobByUserId);
 
 router.post("/job/apply/:jobId", verifyAccessToken, isJobseeker, applyForJob );
 router.get("/job/applied/user", verifyAccessToken, isAnyRecruiterOrAdminOrJobseeker, getAppliedJobsByUserId);
 
-router.post("/job/close/:id", verifyAccessToken, isAnyRecruiterOrAdmin , closeJob);
-router.post("/job/reopen/:id", verifyAccessToken, isAnyRecruiterOrAdmin, reopenJob);
+router.post("/job/close/:id", verifyAccessToken, closeJob);
+router.post("/job/reopen/:id", verifyAccessToken, reopenJob);
 
 //admin routes
 router.get("/admin/jobs",verifyAdminAccessToken , isAdmin ,getAllJobs);

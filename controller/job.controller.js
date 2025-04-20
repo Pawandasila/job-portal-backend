@@ -4,7 +4,6 @@ import User from "../model/user.Model.js";
 import mongoose from "mongoose";
 import JobSeeker from "../model/job-seeker.Model.js";
 import Applications from "../model/applications.Model.js";
-import { getApplicationByJobId } from "./applications.controller.js";
 
 export const createJob = async (req, res, next) => {
   try {
@@ -607,7 +606,9 @@ export const applyForJob = async (req, res) => {
 
     // Fetch job and job seeker
     const job = await Job.findById(jobId);
+    const userId = await User.findById(_id);
     const jobSeeker = await JobSeeker.findOne({ user_id: jobSeekerId });
+    console.log(job?.createdBy)
 
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
@@ -623,9 +624,11 @@ export const applyForJob = async (req, res) => {
     }
 
     // Check if job seeker has already applied
-    const existingApplication = await Applications.findOne({ 
-      jobId: jobId.toString(), 
-      userId: jobSeekerId.toString() 
+    const existingApplication = await Applications.findOne({
+      jobId,
+      userId: jobSeekerId,
+      jobseekerId: jobSeeker._id,
+      recuriterid : job?.createdBy
     });
     
     if (existingApplication) {
@@ -641,15 +644,13 @@ export const applyForJob = async (req, res) => {
         requiredFields: profileStatus.missingEssentialFields,
       });
     }
-
-    // Create a new application with fields matching the schema
-    const applicationId = new mongoose.Types.ObjectId().toString();
     const application = new Applications({
-      id: applicationId,
-      userId: jobSeekerId.toString(),
-      jobId: jobId.toString(),
+      userId: jobSeekerId,
+      jobId,
+      jobseekerId: jobSeeker._id,
       applicationDate: new Date(),
-      status: "submited",
+      recuriterid : job?.createdBy,
+      status: "submitted",
     });
     
     await application.save();
@@ -683,6 +684,7 @@ export const applyForJob = async (req, res) => {
       application,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       message: "Error applying for the job",
       error: error.message,
